@@ -1,17 +1,9 @@
 $(document).ready(function(){
-    $("#table").hide();
-    $("#show_tables").click(function() {
-            $("#container").hide();
-            $("#table").show();
-            $("#show_tables").addClass("active");
-            $("#show_charts").removeClass("active");
+    $("#data_details").hide();
+    $("#show_details").click(function() {
+        $("#data_details").show();
     });
-    $("#show_charts").click(function() {
-        $("#container").show();
-        $("#table").hide();
-        $("#show_charts").addClass("active");
-        $("#show_tables").removeClass("active");
-    });
+
     var series = [{
         name:"RE1_UVB",
         data: []
@@ -44,63 +36,64 @@ $(document).ready(function(){
                 CSV_string = CSV_string + linebreak;
                 date_arr.push(result[val]['date']);
             }
-            Highcharts.chart('container', {
-                data: {
-                    // enablePolling: true,
-                },
-                title: {
-                    text: 'UV DATA'
-                },
-                subtitle: {
-                    text: 'Source: open data'
-                },
-                credits: {
-                    enabled: false
-                },
-                yAxis: {
-                    title: {
-                        text: 'UV variables'
-                    }
-                },
-                legend: {
-                    layout: 'vertical',
-                    align: 'right',
-                    verticalAlign: 'middle'
-                },
-                plotOptions: {
-                    series: {
-                        label: {
-                            connectorAllowed: false
-                        }
-                    }
-                },
-                xAxis:{
-                    type: 'datetime',
-                    labels: {
-                        format: '{value:%Y-%b-%e}'
+            if (document.getElementById("uv_data_container")) {
+                Highcharts.chart('uv_data_container', {
+                    data: {
+                        // enablePolling: true,
                     },
-                    data:date_arr,
-                },
-                series: series,
-                responsive: {
-                    rules: [{
-                        condition: {
-                            maxWidth: 500
-                        },
-                        chartOptions: {
-                            legend: {
-                                layout: 'horizontal',
-                                align: 'center',
-                                verticalAlign: 'bottom'
+                    title: {
+                        text: 'UV DATA'
+                    },
+                    subtitle: {
+                        text: 'Source: open data'
+                    },
+                    credits: {
+                        enabled: false
+                    },
+                    yAxis: {
+                        title: {
+                            text: 'UV variables'
+                        }
+                    },
+                    legend: {
+                        layout: 'vertical',
+                        align: 'right',
+                        verticalAlign: 'middle'
+                    },
+                    plotOptions: {
+                        series: {
+                            label: {
+                                connectorAllowed: false
                             }
                         }
-                    }]
-                }
-            });
+                    },
+                    xAxis: {
+                        type: 'datetime',
+                        labels: {
+                            format: '{value:%Y-%b-%e}'
+                        },
+                        data: date_arr,
+                    },
+                    series: series,
+                    responsive: {
+                        rules: [{
+                            condition: {
+                                maxWidth: 500
+                            },
+                            chartOptions: {
+                                legend: {
+                                    layout: 'horizontal',
+                                    align: 'center',
+                                    verticalAlign: 'bottom'
+                                }
+                            }
+                        }]
+                    }
+                });
+            };
         }});
     CSV_string = CSV_string + linebreak;
     $("#export_csv").click(function() {
-        console.log(CSV_string);
         var blob = new Blob([CSV_string], {
             type: 'text/csv;charset=utf-8'
         });
@@ -122,6 +115,30 @@ $(document).ready(function(){
             });
     }
     });
+
+    var data = "UVData";
+    $("#add_to_cart").click(function(){
+        $.ajax({type:"POST", url: "http://localhost:8080/add_to_cart", data:data, success: function(result) {
+            console.log(result);
+            }});
+        window.location.href = "/show_cart";
+    });
+
+    $("#add_custom_request").click(function(){
+        $.ajax({type:"POST", url: "http://localhost:8080/add_to_cart", data:data, success: function(result) {
+                console.log(result);
+            }});
+        window.location.href = "/show_cart";
+    });
+    $("form").submit(function() {
+        var $inputs = $('#featureRequest :input');
+        console.log($inputs);
+        $.ajax({type:"POST", url: "/add_custom_request", data:$inputs, success: function(result) {
+                console.log(result);
+            }});
+
+    });
+
 
 
 });

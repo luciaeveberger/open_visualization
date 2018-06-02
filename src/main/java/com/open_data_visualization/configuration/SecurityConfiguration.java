@@ -1,6 +1,7 @@
 package com.open_data_visualization.configuration;
 
 import javax.sql.DataSource;
+import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
@@ -29,6 +30,9 @@ public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
 	@Value("${spring.queries.roles-query}")
 	private String rolesQuery;
 
+    @Value("select * from uv_data")
+    public List<String> uvQuery;
+
 	@Override
 	protected void configure(AuthenticationManagerBuilder auth)
 			throws Exception {
@@ -47,12 +51,20 @@ public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
 			authorizeRequests()
 				.antMatchers("/").permitAll()
 				.antMatchers("/login").permitAll()
+				.antMatchers("/index").permitAll()
 				.antMatchers("/show_visuals").permitAll()
+				.antMatchers("/show_pollen").permitAll()
+				.antMatchers("/all_uv_data").permitAll()
+                .antMatchers("/all_pollen_data").permitAll()
+				.antMatchers("/about").permitAll()
 				.antMatchers("/registration").permitAll()
+				.antMatchers("/add_to_cart").permitAll()
+				.antMatchers("/show_cart").permitAll()
+				.antMatchers("/get_all_cart").permitAll()
 				.antMatchers("/admin/**").hasAuthority("ADMIN").anyRequest()
 				.authenticated().and().csrf().disable().formLogin()
 				.loginPage("/login").failureUrl("/login?error=true")
-				.defaultSuccessUrl("/admin/home")
+				.defaultSuccessUrl("/index")
 				.usernameParameter("email")
 				.passwordParameter("password")
 				.and().logout()
