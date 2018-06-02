@@ -1,0 +1,13 @@
+/*.margin-top-small{*/
+    /*margin-top:10%;*/
+/*}*/
+/* to fix the fixed top navigation */
+body {
+    padding-top: 70px;
+}
+.margin-top{
+  margin-top:100px;
+}
+.set_height{
+    max-height:1500px;
+}

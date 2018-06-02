@@ -1,0 +1,74 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head th:replace="fragments/header :: header">
+</head>
+<body class="set_height">
+<div th:replace="fragments/navigation :: navigation"></div>
+<ul class="nav justify-content-center">
+            <!-- base html -->
+            <li class="nav-item">
+                <a class="nav-link  active" id="show_charts">Show Chart</a>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link " data-toggle="modal" data-target="#loginRequired">Request Features</a>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link btn btn-sm btn-outline-primary" id="export_csv"> Export to csv</a>
+            </li>
+        <li sec:authorize="isAuthenticated()"> <a class="nav-link btn btn-sm btn-outline-primary" id="add_to_cart" > Add to Cart</a> </li>
+
+</ul>
+<div class="album py-5 bg-light" style="padding-top: 1rem!important;">
+    <div id="uv_data_container"></div>
+    <div class="container">
+        <div class="col-md-4">
+        <a class="nav-link btn btn-sm btn-outline-primary" id="show_details"> Show details: </a>
+        <p id="data_details"> Data is sourced from <a href=" http://daten.buergernetz.bz.it/de/dataset/uv-irradiation-in-southtyrol/resource/bdf50e30-4163-4f58-b831-caf7e0b4db78"> here </a>. The data gives a snapshot on how strong the UV irritation can get during the peak hours of the day.
+        </p>
+        </div>
+    </div>
+</div>
+<!-- modal for the login -->
+<div class="modal fade" id="loginRequired" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content" sec:authorize="!isAuthenticated()">
+            <div class="modal-header">
+                <!-- if user not logged in-->
+                <h5 class="modal-title" id="exampleModalLabel">Login required for this feature</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                <a class="btn btn-primary" th:href="@{/login}">login now</a>
+            </div>
+        </div>
+        <div class="modal-content" sec:authorize="isAuthenticated()">
+            <div class="modal-header">
+                <!-- if user not logged in-->
+                <h5 class="modal-title">Request Feature to be added to your cart</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+
+                <div class="modal-body">
+                    <div class="form-group">
+                        <label for="requestedFeature">Description of Feature</label>
+                        <form autocomplete="off" class="form-horizontal"
+                              role="form" id="featureRequest">
+                        <input type="text" placeholder="Name"
+                               class="form-control" lass="form-control" id="requestedFeature" aria-describedby="emailHelp">
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                        <input type="submit" class="btn btn-primary">Request Feature</input>
+                    </div>
+                </form>
+                </div>
+                </div>
+        </div>
+    </div>
+</div>
+</body>
+</html>
