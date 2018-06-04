@@ -49,7 +49,6 @@ public class VisualizationController {
 
     @GetMapping(path="/all_uv_data")
     public @ResponseBody List<UVData> getAllUVData() {
-//        System.out.print(uvRepository.findAll());
         return uvRepository.findAll();
     }
     @GetMapping(path="/all_pollen_data")

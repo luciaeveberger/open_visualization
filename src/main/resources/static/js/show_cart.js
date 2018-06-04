@@ -1,6 +1,6 @@
 $(document).ready(function(){
 
-    $.ajax({url: "http://localhost:8080/get_all_cart", success: function(result) {
+    $.ajax({url: "/get_all_cart", success: function(result) {
             var cart_contents = [];
             var cart_requests = [];
             for (var res in result){

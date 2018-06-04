@@ -26,18 +26,20 @@ $(document).ready(function(){
         CSV_string = CSV_string + series[key]['name'] + deliminatior
     }
 
-    $.ajax({url: "http://localhost:8080/all_uv_data", success: function(result) {
+
+    $.ajax({url: "/all_uv_data", success: function(result) {
             for (var val in result) {
-                series[0].data.push(result[val]['re1_UVB']);
-                series[2].data.push(result[val]['re1_UVA']);
+                series[0].data.push([result[val]['date']/10000, result[val]['re1_UVB']]/10000);
+                //series[1].data.push([result[val]['date'], result[val]['re1_T_UVB']]);
+                series[2].data.push([result[val]['date'],result[val]['re1_UVA']]);
                 CSV_string = CSV_string + result[val]['date'] + deliminatior;
                 CSV_string = CSV_string + result[val]['re1_UVB'] + deliminatior;
                 CSV_string = CSV_string + result[val]['re1_UVA'] + deliminatior;
                 CSV_string = CSV_string + linebreak;
-                date_arr.push(result[val]['date']);
             }
             if (document.getElementById("uv_data_container")) {
                 Highcharts.chart('uv_data_container', {
+                    zoomType: 'xy',
                     data: {
                         // enablePolling: true,
                     },
@@ -63,16 +65,15 @@ $(document).ready(function(){
                     plotOptions: {
                         series: {
                             label: {
-                                connectorAllowed: false
-                            }
+                                connectorAllowed: false,
+                            },
+                           // data:date_arr
+
                         }
                     },
                     xAxis: {
                         type: 'datetime',
-                        labels: {
-                            format: '{value:%Y-%b-%e}'
-                        },
-                        data: date_arr,
+                        // data:date_arr,
                     },
                     series: series,
                     responsive: {
@@ -118,14 +119,14 @@ $(document).ready(function(){
 
     var data = "UVData";
     $("#add_to_cart").click(function(){
-        $.ajax({type:"POST", url: "http://localhost:8080/add_to_cart", data:data, success: function(result) {
+        $.ajax({type:"POST", url: "/add_to_cart", data:data, success: function(result) {
             console.log(result);
             }});
         window.location.href = "/show_cart";
     });
 
     $("#add_custom_request").click(function(){
-        $.ajax({type:"POST", url: "http://localhost:8080/add_to_cart", data:data, success: function(result) {
+        $.ajax({type:"POST", url: "/add_to_cart", data:data, success: function(result) {
                 console.log(result);
             }});
         window.location.href = "/show_cart";
