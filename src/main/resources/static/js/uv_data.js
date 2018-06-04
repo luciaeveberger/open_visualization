@@ -29,7 +29,7 @@ $(document).ready(function(){
 
     $.ajax({url: "/all_uv_data", success: function(result) {
             for (var val in result) {
-                series[0].data.push([result[val]['date']/10000, result[val]['re1_UVB']]/10000);
+                series[0].data.push([result[val]['date'], result[val]['re1_UVB']]);
                 //series[1].data.push([result[val]['date'], result[val]['re1_T_UVB']]);
                 series[2].data.push([result[val]['date'],result[val]['re1_UVA']]);
                 CSV_string = CSV_string + result[val]['date'] + deliminatior;
@@ -127,15 +127,16 @@ $(document).ready(function(){
 
     $("#add_custom_request").click(function(){
         $.ajax({type:"POST", url: "/add_to_cart", data:data, success: function(result) {
-                console.log(result);
+
             }});
         window.location.href = "/show_cart";
     });
-    $("form").submit(function() {
-        var $inputs = $('#featureRequest :input');
-        console.log($inputs);
-        $.ajax({type:"POST", url: "/add_custom_request", data:$inputs, success: function(result) {
-                console.log(result);
+    $('.modal form').on('submit', function(event) {
+        //stops modal from opening
+        event.preventDefault();
+        var requestValue = document.getElementById("featureRequest").value;
+        $.ajax({type:"POST", url: "/add_custom_request", data:requestValue, success: function(result) {
+                window.location.href = "/show_cart";
             }});
 
     });

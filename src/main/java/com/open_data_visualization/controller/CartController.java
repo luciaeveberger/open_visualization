@@ -43,10 +43,9 @@ public class CartController {
     }
 
     @RequestMapping(value = "/add_custom_request", method = RequestMethod.POST)
-    public ModelAndView  addCustomRequest(@RequestBody String string_request) {
-        System.out.println(string_request);
+    public ModelAndView addCustomRequest(@RequestBody String custom_request) {
         Authentication auth = SecurityContextHolder.getContext().getAuthentication();
-        Cart newItem = new Cart(auth.getName(),"",string_request);
+        Cart newItem = new Cart(auth.getName(),"", custom_request);
         cartRepo.save(newItem);
         return new ModelAndView("redirect:/show_cart");
     }
